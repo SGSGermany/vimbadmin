@@ -15,13 +15,6 @@
 require_once('Zend/Config.php');
 require_once('Zend/Config/Ini.php');
 
-$env = [];
-foreach (getenv() as $name => $value) {
-    if ((substr_compare($name, 'VIMBADMIN_', 0, 10) === 0) && ($value !== '')) {
-        $env[substr($name, 10)] = $value;
-    }
-}
-
 $config = [];
 
 // load config.user.ini
@@ -41,39 +34,18 @@ $config['phpSettings']['display_errors'] ??= false;
 $config['phpSettings']['display_startup_errors'] ??= false;
 
 // load ViMbAdmin secrets
-$config['securitysalt'] =
-    $env['SETUP_KEY']
-    ?? $config['securitysalt']
-    ?? null;
-
-$config['resources']['auth']['oss']['rememberme']['salt'] =
-    $env['COOKIE_KEY']
-    ?? $config['resources']['auth']['oss']['rememberme']['salt']
-    ?? null;
+$config['securitysalt'] ??= null;
+$config['resources']['auth']['oss']['rememberme']['salt'] ??= null;
 
 if (file_exists('/etc/vimbadmin/config.secret.inc.php')) {
     require('/etc/vimbadmin/config.secret.inc.php');
 }
 
 // password config
-$config['defaults']['mailbox']['password_scheme'] =
-    $env['PASSWORD_SCHEME']
-    ?? $config['defaults']['mailbox']['password_scheme']
-    ?? 'crypt:sha512';
-
-$config['defaults']['mailbox']['password_salt'] =
-    $env['PASSWORD_SALT']
-    ?? $config['defaults']['mailbox']['password_salt']
-    ?? null;
-
-$config['defaults']['mailbox']['min_password_length'] =
-    $env['PASSWORD_MIN_LENGTH']
-    ?? $config['defaults']['mailbox']['min_password_length']
-    ?? 8;
-
-$config['defaults']['mailbox']['dovecot_pw_binary'] =
-    $config['defaults']['mailbox']['dovecot_pw_binary']
-    ?? null;
+$config['defaults']['mailbox']['password_scheme'] ??= 'crypt:sha512';
+$config['defaults']['mailbox']['password_salt'] ??= null;
+$config['defaults']['mailbox']['min_password_length'] ??= 8;
+$config['defaults']['mailbox']['dovecot_pw_binary'] ??= null;
 
 if (file_exists('/etc/vimbadmin/config.password.inc.php')) {
     require('/etc/vimbadmin/config.password.inc.php');
@@ -87,16 +59,6 @@ $config['resources']['doctrine2']['connection']['options']['dbname'] ??= 'mail';
 $config['resources']['doctrine2']['connection']['options']['user'] ??= 'mail';
 $config['resources']['doctrine2']['connection']['options']['password'] ??= '';
 $config['resources']['doctrine2']['connection']['options']['charset'] ??= 'utf8';
-
-if (isset($env['MYSQL_DATABASE'])) {
-    $config['resources']['doctrine2']['connection']['options']['dbname'] = $env['MYSQL_DATABASE'];
-}
-if (isset($env['MYSQL_USER'])) {
-    $config['resources']['doctrine2']['connection']['options']['user'] = $env['MYSQL_USER'];
-}
-if (isset($env['MYSQL_PASSWORD'])) {
-    $config['resources']['doctrine2']['connection']['options']['password'] = $env['MYSQL_PASSWORD'];
-}
 
 if (file_exists('/etc/vimbadmin/config.database.inc.php')) {
     require('/etc/vimbadmin/config.database.inc.php');
@@ -156,7 +118,7 @@ if (!$config['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases']) 
     ];
 }
 
-(static function () use (&$config, $env): void {
+(static function () use (&$config): void {
     $aliasList = $config['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases'];
     $aliasGotoMap = $config['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultMapping'];
 
@@ -167,7 +129,6 @@ if (!$config['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases']) 
         $aliasGoto =
             $aliasGotoMap[$alias]
             ?? $aliasGotoMap['*']
-            ?? $env['ADMIN_EMAIL']
             ?? null;
 
         if ($aliasGoto) {
@@ -180,7 +141,7 @@ if (!$config['vimbadmin_plugins']['MailboxAutomaticAliases']['defaultAliases']) 
 // identity config
 $config['identity']['orgname'] ??= null;
 $config['identity']['name'] ??= 'ViMbAdmin Administrator';
-$config['identity']['email'] ??= $env['ADMIN_EMAIL'] ?? 'admin@example.com';
+$config['identity']['email'] ??= 'admin@example.com';
 
 $config['identity']['autobot']['name'] ??= $config['identity']['name'];
 $config['identity']['autobot']['email'] ??= $config['identity']['email'];
