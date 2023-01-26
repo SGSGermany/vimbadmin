@@ -1,0 +1,19 @@
+--- Version.php.orig	2023-01-26 16:34:17.930456104 +0100
++++ Version.php.new	2023-01-26 16:39:37.272698932 +0100
+@@ -66,6 +66,16 @@
+     protected static $_lastestVersion = null;
+ 
+     /**
++     * Returns the milestone version (e.g. '3.0')
++     *
++     * @return string
++     */
++    public static function getMilestone()
++    {
++        return preg_match( '/^([0-9]+\.[0-9]+)\./', self::VERSION, $matches ) ? $matches[1] : '';
++    }
++
++    /**
+      * Compare the specified version string $version
+      * with the current ViMbAdmin_Version::VERSION.
+      *

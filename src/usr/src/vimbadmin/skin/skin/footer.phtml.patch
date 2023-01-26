@@ -1,0 +1,27 @@
+--- footer.phtml.orig	2023-01-26 16:12:21.009283191 +0100
++++ footer.phtml.new	2023-01-26 16:29:22.804706374 +0100
+@@ -36,7 +36,7 @@
+         </p>
+         <p>
+             <a href="http://www.vimbadmin.net/">ViMbAdmin</a>
+-                <a href="https://github.com/opensolutions/ViMbAdmin/releases">V{ViMbAdmin_Version::VERSION}</a>.
++                <a href="https://github.com/opensolutions/ViMbAdmin/releases">V{ViMbAdmin_Version::getMilestone()}</a>.
+             Licensed under the <a href="http://www.gnu.org/licenses/gpl-3.0-standalone.html" target="_blank" title="GNU GPL v3">
+                 GNU General Public License V3
+             </a>.
+@@ -57,15 +57,6 @@
+             <span class="label label-info">
+                 <a class="aplain" href="http://www.opensolutions.ie/">Open Solutions</a>
+             </span>
+-            &nbsp;|&nbsp;
+-            <span class="label label-info">
+-                <a class="aplain" href="https://groups.google.com/forum/#!forum/vimbadmin-announce">Announcements</a>
+-            </span>
+-            and
+-            <span class="label label-info">
+-                <a class="aplain" href="https://groups.google.com/forum/#!forum/vimbadmin-discuss">Discussion</a>
+-            </span>
+-            Mailing Lists
+     	</p>
+ 
+ 
