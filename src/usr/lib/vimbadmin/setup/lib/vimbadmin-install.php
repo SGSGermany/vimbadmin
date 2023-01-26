@@ -38,13 +38,13 @@ function __request(string $requestMethod = 'GET', string $requestUri = '', array
         $pathInfo = substr($requestUri, 0, $pos);
         $queryString = substr($requestUri, $pos + 1);
         parse_str($queryString, $queryParams);
-        $_GET = array_merge($_GET, $queryParams);
+        $_GET = $queryParams;
     } else {
         $pathInfo = $requestUri;
     }
 
     if ($postParams) {
-        $_POST = array_merge($_POST, $postParams);
+        $_POST = $postParams;
     }
 
     $_SERVER['REQUEST_SCHEME'] = 'http';
